@@ -29,5 +29,29 @@ def home(request):
         'timestamp': latest_key
     })
 
+#def dashboard(request):
+   # return render(request, 'dashboard.html')
+
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    try:
+        response = requests.get(f"{FIREBASE_URL}/glucoseLevel.json")
+        data = response.json()
+
+        if data:
+            # Sort keys and get the latest
+            keys = sorted(data.keys())
+            values = [entry.get('humidity', 0) for entry in data.values() if isinstance(entry, dict)]
+            latest_value = data[keys[-1]].get('humidity', 'N/A')
+            average_value = round(sum(values) / len(values), 1) if values else 'N/A'
+        else:
+            latest_value = 'No data'
+            average_value = 'N/A'
+
+    except Exception as e:
+        latest_value = 'Error'
+        average_value = 'N/A'
+
+    return render(request, 'dashboard.html', {
+        'glucose': latest_value,
+        'average': average_value
+    })
