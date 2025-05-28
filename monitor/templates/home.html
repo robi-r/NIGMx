@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Glucose</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+    body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .glucose-card {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            width: 350px;
+        }
+
+        .circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #e1f5fe, #b3e5fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #01579b;
+            border: 6px solid #4fc3f7;
+        }
+
+        .status {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #777;
+        }
+
+        .timestamp {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            background: #4fc3f7;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #039be5;
+        }
+    </style>
+    <meta http-equiv="refresh" content="5">
+</head>
+<body>
+
+    <h2>Live Glucose Measurements</h2>
+
+    <div class="glucose-card">
+        <div class="circle">
+            {{ glucose }}<small style="font-size: 16px;">mg/dl</small>
+        </div>
+        <div class="status">
+            {% if glucose != "N/A" and glucose != "Error" %}
+                {% if glucose < 70 %}
+                    <span style="color: red;">Low Glucose</span>
+                {% elif glucose > 180 %}
+                    <span style="color: orange;">High Glucose</span>
+                {% else %}
+                    <span style="color: green;">Normal Glucose</span>
+                {% endif %}
+            {% else %}
+                <span style="color: gray;">Data Unavailable</span>
+            {% endif %}
+        </div>
+        <div class="timestamp">
+            Last Key: {{ timestamp }}
+        </div>
+    </div>
+
+    <a class="back-btn" href="{% url 'dashboard' %}">← Back to Dashboard</a>
+
+</body>
+</html>
+
