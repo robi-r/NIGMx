@@ -11,8 +11,8 @@
 <body>
     <div class="sidebar">
         <h2>NIGMx</h2>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="#">Emergency Contact</a>
+        <a href="{% url 'home' %}">Live Glucose</a>
+        <a href="{% url 'missions' %}">Missions</a>
         <a href="#">Services</a>
         <a href="#">Logout</a>
         <div class="profile">Profile</div>
@@ -25,18 +25,31 @@
         </div>
         <div class="top-cards">
             <div class="glucose-level">
-                <h3>125 avg. mg/dl</h3>
-                <p>Normal Glucose level</p>
-                <div class="range">Normal: 70–140 mg/dl</div>
-            </div>
-            <div class="glucose-live">
+               <p>Live Glucose Level</p>
                 <h3>{{ glucose }} mg/dl</h3>
-                <p>Live Glucose Level</p>
+
+                <p>Average Glucose Level</p>
+                <h3>{{ average }} mg/dl</h3>
+                 <div class="status">
+                    <strong>Status:</strong>
+                    {% if glucose != "N/A" and glucose != "Error" %}
+                        {% if glucose < 70 %}
+                            <span style="color: red;">Low Glucose</span>
+                        {% elif glucose > 180 %}
+                            <span style="color: orange;">High Glucose</span>
+                        {% else %}
+                            <span style="color: green;">Normal Glucose</span>
+                        {% endif %}
+                    {% else %}
+                        <span style="color: gray;">Data Unavailable</span>
+                    {% endif %}
+                </div>
+
+                <div class="range">Normal: 70–140 mg/dl</div>
             </div>
 
             <div class="glucose-average">
-                <h3>{{ average }} mg/dl</h3>
-                <p>Average Glucose Level</p>
+
             </div>
 
             <div class="instant-advices">
